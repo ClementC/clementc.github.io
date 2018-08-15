@@ -3,7 +3,7 @@
 <head>
             <meta charset="utf-8">
         <!-- Site Meta Data -->
-        <title>Moving efficiently in the CLI</title>
+        <title>Anki setup for code and math cards</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="Clément Chastagnol">
@@ -28,13 +28,13 @@
         <meta name="twitter:image" content="">
 
     <meta name="twitter:creator" content="">
-    <meta name="twitter:url" content="/blog/2018/01/25/moving_cli/">
-    <meta name="twitter:title" content="Clément Chastagnol ~ Moving efficiently in the CLI">
-    <meta name="twitter:description" content="A cheatsheet for moving efficiently in the CLI!">
+    <meta name="twitter:url" content="/blog/2018/08/15/anki_setup/">
+    <meta name="twitter:title" content="Clément Chastagnol ~ Anki setup for code and math cards">
+    <meta name="twitter:description" content="Detailed instructions to setup Anki with LaTeX.">
 
     <!-- Facebook Meta Data -->
-    <meta property="og:title" content="Clément Chastagnol ~ Moving efficiently in the CLI"/>
-    <meta property="og:description" content="A cheatsheet for moving efficiently in the CLI!"/>
+    <meta property="og:title" content="Clément Chastagnol ~ Anki setup for code and math cards"/>
+    <meta property="og:description" content="Detailed instructions to setup Anki with LaTeX."/>
     <meta property="og:image" content=""/>
 </head>
 
@@ -76,8 +76,8 @@
 <article>
     <section id="content">
         <article>
-            <h2 class="post_title post_detail"><a href="/blog/2018/01/25/moving_cli/" rel="bookmark"
-                                                  title="Permalink to Moving efficiently in the CLI">Moving efficiently in the CLI</a></h2>
+            <h2 class="post_title post_detail"><a href="/blog/2018/08/15/anki_setup/" rel="bookmark"
+                                                  title="Permalink to Anki setup for code and math cards">Anki setup for code and math cards</a></h2>
             <div class="entry-content blog-post">
                 <style type="text/css">/*!
 *
@@ -1051,7 +1051,8 @@ h6:hover .anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>I'm tired of pounding on the arrow keys when moving in the command line, but I keep on forgetting the keyboard shorcuts that would help me move more efficiently, so here's a simple diagram in a flashcard format for future reference!</p>
+<p>After stumbling on a <strong><a href="https://threadreaderapp.com/thread/957763229454774272.html">very detailed Twitter thread</a></strong> (now expanded into an <strong><a href="http://augmentingcognition.com/ltm.html">even more extensive blog post</a></strong>) by <strong><a href="http://michaelnielsen.org/">Michael Nielsen</a></strong> some months ago, I got inspired to try <strong><a href="https://apps.ankiweb.net/">Anki</a></strong> as a tool to make learning new things more efficient.</p>
+<p>This post gathers in the same place ressources (SO questions, blog posts...) that I used to get to my current setup. I will probably need it at some future time, and hopefully it can help others too.</p>
 </div>
 </div>
 </div>
@@ -1059,7 +1060,9 @@ h6:hover .anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="/figures/moving_cli.png" style="width:600px" title="Moving efficiently in the command line"></p>
+<h2 id="Apps-and-account">Apps and account<a class="anchor-link" href="#Apps-and-account">¶</a></h2><p>I use the Anki desktop apps on Ubuntu and Mac mainly for creating cards, and the <strong><a href="https://play.google.com/store/apps/details?id=com.ichi2.anki">Android app</a></strong> for reviewing on the go. I use a free <strong><a href="https://ankiweb.net/about">AnkiWeb</a></strong> account to synchronize decks between the three apps; I don’t use the web interface for reviewing.</p>
+<p>The interplay between the different apps is quite smooth as long as you make sure that the synchronization is well run after each review session, and more importantly after each modification of your decks.
+Sometimes the sync will not work, for instance because of a network outage on your smartphone. In that case you will be prompted in to choose which version to keep (the server one or the local one); just stop and think about which one is the most recent and you should be good.</p>
 </div>
 </div>
 </div>
@@ -1067,8 +1070,54 @@ h6:hover .anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>I found a useful table with most of those in the <strong><a href="https://nostarch.com/howlinuxworks2">How Linux Works</a></strong> book that I'm currently reading, and some more on Stack Overflow.</p>
-<p>If you plan on using them, please bear in mind that these keyboard shorcuts depend on quite a number of things: the Unix distribution that you're using, your shell, your own configuration quirks... so YMMV.</p>
+<h2 id="Plugins-and-LaTeX">Plugins and LaTeX<a class="anchor-link" href="#Plugins-and-LaTeX">¶</a></h2><p>I installed the <strong><a href="https://ankiweb.net/shared/info/162313389">Power Format Pack</a></strong> plugin, which allows for more advanced formatting options, especially for source code and LaTeX.</p>
+<p>Setting up LaTeX is not a very straightforward experience, so you can always use a website to generate images of your expressions (I used <strong><a href="https://www.codecogs.com/eqnedit.php">this one</a></strong> for a few days before mustering the courage to dive into a session of googling and Stack Overflow poring...).</p>
+<p>Anyway, here’s a list of instructions (assuming Ubuntu).</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="LaTeX-installation">LaTeX installation<a class="anchor-link" href="#LaTeX-installation">¶</a></h3><p>In a terminal, run <code>sudo apt-get install texlive-base dvipng</code>.</p>
+<p>Those are rather heavy packages, and they are needed because Anki compiles your LaTeX code using these libraries, and insert the generated images into the cards; reference for this step <strong><a href="https://askubuntu.com/questions/668762/using-latex-in-anki#comment1669609_671265">here</a></strong>.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Improving-Anki-formatting">Improving Anki formatting<a class="anchor-link" href="#Improving-Anki-formatting">¶</a></h3><p>With the default options, the generated images are a bit too big and are not vertically aligned with the text, which annoyed me.</p>
+<p>To solve this, you first have to change the LaTeX header in the template of the cards: go to <code>"Tools > Manage Note Types"</code>, and for each type of decks, click on it, then click on <code>"Options"</code> and in the top text field (<code>"Header"</code>), add a line after the last one (<code>\begin{document}</code>) to set the font size.</p>
+<p>I found that <code>\footnotesize</code> worked best for me. You might want to experiment though, so <strong><a href="https://en.wikibooks.org/w/index.php?title=LaTeX/Fonts§ion=5#Built-in_sizes">here’s a list of LaTeX font sizes</a></strong>.</p>
+<p>In the first line (<code>\documentclass[12pt]{article}</code>), I also changed the size from <code>12pt</code> to <code>8pt</code>. I think I could have arrived at the same visual result without modifying the <code>12pt</code> by choosing an even smaller font size category like <code>\tiny</code>, but it’s working that way.</p>
+<p>You can then close this window, and click on <code>"Cards…"</code>; then in the <code>"Styling"</code> textbox, append these lines to correct the vertical alignment problem:</p>
+<pre><code>img[src*="latex"] {
+  vertical-align: middle;
+}</code></pre>
+<p>You now need to repeat this of every type of deck that needs it (references for these instructions: <strong><a href="https://stackoverflow.com/questions/29453810/math-latex-horizontally-aligned-with-text/31862519#31862519">here</a></strong> and <strong><a href="https://tex.stackexchange.com/questions/108418/anki-latex-math-font-size-declaremathsizes/132799#132799">there</a></strong>).</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Regenerating-formulas-images">Regenerating formulas images<a class="anchor-link" href="#Regenerating-formulas-images">¶</a></h3><p>If you didn’t have any cards created with LaTeX, you’re good to go. You’ll notice that the sync is now uploading medias along your cards: those are the generated images for your LaTeX formulas.</p>
+<p>If instead you already had some cards created, Anki has to regenerate the images. You also need to do this if you want to experiment with the formatting options, to examine the result after each change.</p>
+<p>The most simple way is to remove all the images named with the pattern <code>latex-*.png</code> in the <code>collection.media</code> directory, which for me is in <code>~/.local/share/Anki2/User 1/</code> on Ubuntu (you can always search the directory name on a different system to locate it).</p>
+<p>At last in Anki, execute <code>"Tools > Check Media"</code>; Anki will then recompile all your LaTeX formulas and regenerate the images. You can now sync. Reference for this part <strong><a href="https://www.reddit.com/r/Anki/comments/7t6ewx/how_to_force_anki_to_recompile_latex_code/">here</a></strong>.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">¶</a></h2><p>I have barely scratched the surface of what is possible with Anki (more complicated cards with cloze, fiddling with the reviewing settings...), but I really like the flexibility it provides for creating cards.</p>
+<p>I have a feeling that I will need to come back to this page in some time when I change my phone or laptop, and that future-me will thank me...</p>
 </div>
 </div>
 </div>
@@ -1109,37 +1158,37 @@ h6:hover .anchor-link {
                 <span> in </span>
                 <span class="post_category"><a href="/category/posts.html" rel="bookmark"
                                                title="Permalink to posts">[ posts ]</a></span>
-                <span class="post_date">Jeu 25 janvier 2018</span>
+                <span class="post_date">Mer 15 août 2018</span>
                 <div><span>Tags : </span>
-                            <span><a href="/tag/linux.html">#Linux, </a></span>
+                            <span><a href="/tag/anki.html">#Anki, </a></span>
                 </div>
 
                 <div class="entry-social">
                     <span class="twitter"><a target="_blank" rel="nofollow"
                                              onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=700');return false;"
                                              title="Twitter"
-                                             href="https://twitter.com/share?url=/blog/2018/01/25/moving_cli/&text=Moving efficiently in the CLI&via="><img
+                                             href="https://twitter.com/share?url=/blog/2018/08/15/anki_setup/&text=Anki setup for code and math cards&via="><img
                             src="/theme/images/icons/twitter-s.png"></a></span>
 
                     <span class="gplus"><a target="_blank" title="Google +"
-                                           href="https://plus.google.com/share?url=/blog/2018/01/25/moving_cli/&hl=fr"
+                                           href="https://plus.google.com/share?url=/blog/2018/08/15/anki_setup/&hl=fr"
                                            rel="nofollow"
                                            onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=450,width=650');return false;"><img
                             src="/theme/images/icons/google-s.png"></a></span>
 
                     <span class="facebook"><a target="_blank" title="Facebook" rel="nofollow"
                                               onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=500,width=700');return false;"
-                                              href="https://www.facebook.com/sharer.php?u=/blog/2018/01/25/moving_cli/&t=Moving efficiently in the CLI"><img
+                                              href="https://www.facebook.com/sharer.php?u=/blog/2018/08/15/anki_setup/&t=Anki setup for code and math cards"><img
                             src="/theme/images/icons/facebook-s.png"></a></span>
 
                     <a target="_blank" title="Linkedin"
-                       href="https://www.linkedin.com/shareArticle?mini=true&url=/blog/2018/01/25/moving_cli/&title=Moving efficiently in the CLI"
+                       href="https://www.linkedin.com/shareArticle?mini=true&url=/blog/2018/08/15/anki_setup/&title=Anki setup for code and math cards"
                        rel="nofollow"
                        onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=450,width=650');return false;"><img
                             src="/theme/images/icons/linkedin-s.png"></a>
 
                     <span class="mail"><a
-                            href="mailto:?subject=Moving efficiently in the CLI&amp;body=Viens découvrir un article à propos de [Moving efficiently in the CLI] sur le site de Clément Chastagnol. /blog/2018/01/25/moving_cli/"
+                            href="mailto:?subject=Anki setup for code and math cards&amp;body=Viens découvrir un article à propos de [Anki setup for code and math cards] sur le site de Clément Chastagnol. /blog/2018/08/15/anki_setup/"
                             title="Share by Email" target="_blank"><img
                             src="/theme/images/icons/mail-s.png"></a></span>
                 </div>
