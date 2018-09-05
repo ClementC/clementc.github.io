@@ -54,7 +54,6 @@
                 <li><a class="nav__link" href="/category/posts.html">Posts</a></li>
                 <li><a class="nav__link" href="/archives.html">Archive</a></li>
 
-                <li><a class="nav__link" href="/pages/about.html">About</a></li>
 
         </ul>
     </nav>
@@ -994,8 +993,10 @@ h6:hover .anchor-link {
 .highlight .mh { color: #666666 } /* Literal.Number.Hex */
 .highlight .mi { color: #666666 } /* Literal.Number.Integer */
 .highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
 .highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
 .highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
 .highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
 .highlight .s2 { color: #BA2121 } /* Literal.String.Double */
 .highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
@@ -1006,9 +1007,11 @@ h6:hover .anchor-link {
 .highlight .s1 { color: #BA2121 } /* Literal.String.Single */
 .highlight .ss { color: #19177C } /* Literal.String.Symbol */
 .highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
 .highlight .vc { color: #19177C } /* Name.Variable.Class */
 .highlight .vg { color: #19177C } /* Name.Variable.Global */
 .highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
 <style type="text/css">
 /* Temporary definitions which will become obsolete with Notebook release 5.0 */
@@ -1054,7 +1057,7 @@ h6:hover .anchor-link {
 <p>Recently for work, I've been experimenting with <strong><a href="http://pymc-devs.github.io/pymc3/">PyMC3</a></strong>.</p>
 <p>In particular, I was toying with <strong><a href="https://pymc-devs.github.io/pymc3/notebooks/marginalized_gaussian_mixture_model.html">this example</a></strong> which shows how to implement Gaussian Mixture Models. My goal was to to a generalized mixture, using Gamma distributions instead of more classical Normal distributions.</p>
 <p>At the end of my calculations, I wanted to plot the resulting distributions, along with each component:</p>
-<p><img src="/figures/gamma_mixture.png" style="width:600px" title="This was my goal."></p>
+<p><img src="/figures/gamma_mixture.png" style="width:600px" title="This was my goal." /></p>
 <p>To plot this, I just had to get the average parameters for each Gamma distributions, and compute the probability density function of each component and of the weighted sum with <strong><a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gamma.html#scipy.stats.gamma">scipy.stats.gamma</a></strong>. Easy, right?</p>
 <p>Wrong.</p>
 <p>Because the samples you get from your MCMC chain make it easy to compute the mean $\mu$ and standard deviation $\sigma$ of each Gamma distribution, but it is not so straightforward to parametrize Gamma distributions in scipy.stats with $\mu$ and $\sigma$.</p>
@@ -1066,18 +1069,18 @@ h6:hover .anchor-link {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Canonical-formulation-vs.-API-consistency">Canonical formulation vs. API consistency<a class="anchor-link" href="#Canonical-formulation-vs.-API-consistency">¶</a></h2><p>If you refer to the <strong><a href="https://en.wikipedia.org/wiki/Gamma_distribution">definition of the Gamma distribution</a></strong>, it is defined in its canonical form by a shape parameter $k$ and a scale parameter $\theta$.</p>
-<p>The mean and standard deviation of the distribution are related to these parameters by a nice, simple formulas:<br>
+<p>The mean and standard deviation of the distribution are related to these parameters by a nice, simple formulas:<br />
 $\begin{equation}
 \mu = k\theta \\
 \sigma^2 = k\theta^2 \\
 \end{equation}$</p>
-<p>From here, it's easy to obtain the formulas for $k$ and $\theta$:<br>
+<p>From here, it's easy to obtain the formulas for $k$ and $\theta$:<br />
 $\begin{equation}
 k = \frac{\mu^2}{\sigma^2} \\
 \theta = \frac{\sigma^2}{\mu} \\
 \end{equation}$</p>
 <p>The problem is that scipy.stats does not use the canonical parameters in its formulation of usual distributions, but a combination of two parameters <code>loc</code> and <code>scale</code> with some additional parameters depending on the distributions.</p>
-<p>For instance, to parametrize the Normal distribution you have to plugin the mean $\mu$ as the <code>loc</code> parameter, and the standard deviation $\sigma$ as the <code>scale</code> parameter, which feels quite natural.<br>
+<p>For instance, to parametrize the Normal distribution you have to plugin the mean $\mu$ as the <code>loc</code> parameter, and the standard deviation $\sigma$ as the <code>scale</code> parameter, which feels quite natural.<br />
 But to parametrize a Gamma distribution, a new parameter <code>a</code> appears, whereas for a Beta distribution, two parameters <code>a</code> and <code>b</code> appear alongside <code>loc</code> and <code>scale</code>.</p>
 <p>Parametrizing a new distribution is thus a bit more complicated as you have to check the documentation.</p>
 <p>So what's arguably good for API consistency is more confusing than not when it comes to clarity and ease-of-use.</p>
@@ -1096,7 +1099,7 @@ But to parametrize a Gamma distribution, a new parameter <code>a</code> appears,
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Whining-about-open-source-code">Whining about open-source code<a class="anchor-link" href="#Whining-about-open-source-code">¶</a></h2><p>In the end, it wasn't that much of a big deal, but it's always annoying to be stopped in your analysis and lose time on minor technicalities.<br>
+<h2 id="Whining-about-open-source-code">Whining about open-source code<a class="anchor-link" href="#Whining-about-open-source-code">¶</a></h2><p>In the end, it wasn't that much of a big deal, but it's always annoying to be stopped in your analysis and lose time on minor technicalities.<br />
 I know grumbling is easy and totally warrants a "Do it yourself if you're so unhappy" answer. But when your library features all kind of small friction points like this, you're probably hindering adoption by newcomers.</p>
 <p>So I think a nice add could be to have a <code>.from_mean_and_variance()</code> static method to compute canonical parameter values when a closed-form expression exists. I'll try to make a PR on the <code>distcan</code> lib in the coming days to see how it goes.</p>
 </div>
@@ -1139,7 +1142,7 @@ I know grumbling is easy and totally warrants a "Do it yourself if you're so unh
                 <span> in </span>
                 <span class="post_category"><a href="/category/posts.html" rel="bookmark"
                                                title="Permalink to posts">[ posts ]</a></span>
-                <span class="post_date">Jeu 15 juin 2017</span>
+                <span class="post_date">jeu. 15 juin 2017</span>
                 <div><span>Tags : </span>
                             <span><a href="/tag/python.html">#python, </a></span>
                             <span><a href="/tag/stats.html">#stats, </a></span>
