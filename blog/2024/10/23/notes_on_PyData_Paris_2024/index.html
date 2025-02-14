@@ -83,9 +83,124 @@
 * IPython notebook
 *
 */
-/* CSS font colors for translated ANSI colors. */
+/* CSS font colors for translated ANSI escape sequences */
+/* The color values are a mix of
+   http://www.xcolors.net/dl/baskerville-ivorylight and
+   http://www.xcolors.net/dl/euphrasia */
+.ansi-black-fg {
+  color: #3E424D;
+}
+.ansi-black-bg {
+  background-color: #3E424D;
+}
+.ansi-black-intense-fg {
+  color: #282C36;
+}
+.ansi-black-intense-bg {
+  background-color: #282C36;
+}
+.ansi-red-fg {
+  color: #E75C58;
+}
+.ansi-red-bg {
+  background-color: #E75C58;
+}
+.ansi-red-intense-fg {
+  color: #B22B31;
+}
+.ansi-red-intense-bg {
+  background-color: #B22B31;
+}
+.ansi-green-fg {
+  color: #00A250;
+}
+.ansi-green-bg {
+  background-color: #00A250;
+}
+.ansi-green-intense-fg {
+  color: #007427;
+}
+.ansi-green-intense-bg {
+  background-color: #007427;
+}
+.ansi-yellow-fg {
+  color: #DDB62B;
+}
+.ansi-yellow-bg {
+  background-color: #DDB62B;
+}
+.ansi-yellow-intense-fg {
+  color: #B27D12;
+}
+.ansi-yellow-intense-bg {
+  background-color: #B27D12;
+}
+.ansi-blue-fg {
+  color: #208FFB;
+}
+.ansi-blue-bg {
+  background-color: #208FFB;
+}
+.ansi-blue-intense-fg {
+  color: #0065CA;
+}
+.ansi-blue-intense-bg {
+  background-color: #0065CA;
+}
+.ansi-magenta-fg {
+  color: #D160C4;
+}
+.ansi-magenta-bg {
+  background-color: #D160C4;
+}
+.ansi-magenta-intense-fg {
+  color: #A03196;
+}
+.ansi-magenta-intense-bg {
+  background-color: #A03196;
+}
+.ansi-cyan-fg {
+  color: #60C6C8;
+}
+.ansi-cyan-bg {
+  background-color: #60C6C8;
+}
+.ansi-cyan-intense-fg {
+  color: #258F8F;
+}
+.ansi-cyan-intense-bg {
+  background-color: #258F8F;
+}
+.ansi-white-fg {
+  color: #C5C1B4;
+}
+.ansi-white-bg {
+  background-color: #C5C1B4;
+}
+.ansi-white-intense-fg {
+  color: #A1A6B2;
+}
+.ansi-white-intense-bg {
+  background-color: #A1A6B2;
+}
+.ansi-default-inverse-fg {
+  color: #FFFFFF;
+}
+.ansi-default-inverse-bg {
+  background-color: #000000;
+}
+.ansi-bold {
+  font-weight: bold;
+}
+.ansi-underline {
+  text-decoration: underline;
+}
+/* The following styles are deprecated an will be removed in a future version */
 .ansibold {
   font-weight: bold;
+}
+.ansi-inverse {
+  outline: 0.5px dotted;
 }
 /* use dark versions for foreground, to improve visibility */
 .ansiblack {
@@ -164,12 +279,20 @@ div.cell {
   /* This acts as a spacer between cells, that is outside the border */
   margin: 0px;
   outline: none;
-  border-left-width: 1px;
-  padding-left: 5px;
-  background: linear-gradient(to right, transparent -40px, transparent 1px, transparent 1px, transparent 100%);
+  position: relative;
+  overflow: visible;
+}
+div.cell:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: transparent;
 }
 div.cell.jupyter-soft-selected {
-  border-left-color: #90CAF9;
   border-left-color: #E3F2FD;
   border-left-width: 1px;
   padding-left: 5px;
@@ -182,27 +305,39 @@ div.cell.jupyter-soft-selected {
     border-color: transparent;
   }
 }
-div.cell.selected {
+div.cell.selected,
+div.cell.selected.jupyter-soft-selected {
   border-color: #ababab;
-  border-left-width: 0px;
-  padding-left: 6px;
-  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 5px, transparent 5px, transparent 100%);
+}
+div.cell.selected:before,
+div.cell.selected.jupyter-soft-selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #42A5F5;
 }
 @media print {
-  div.cell.selected {
+  div.cell.selected,
+  div.cell.selected.jupyter-soft-selected {
     border-color: transparent;
   }
 }
-div.cell.selected.jupyter-soft-selected {
-  border-left-width: 0;
-  padding-left: 6px;
-  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 7px, #E3F2FD 7px, #E3F2FD 100%);
-}
 .edit_mode div.cell.selected {
   border-color: #66BB6A;
-  border-left-width: 0px;
-  padding-left: 6px;
-  background: linear-gradient(to right, #66BB6A -40px, #66BB6A 5px, transparent 5px, transparent 100%);
+}
+.edit_mode div.cell.selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #66BB6A;
 }
 @media print {
   .edit_mode div.cell.selected {
@@ -398,7 +533,9 @@ div.input_area > div.highlight > pre {
 .CodeMirror-lines {
   /* In CM2, this used to be 0.4em, but in CM3 it went to 4px. We need the em value because */
   /* we have set a different line-height and want this to scale with that. */
-  padding: 0.4em;
+  /* Note that this should set vertical padding only, since CodeMirror assumes
+       that horizontal padding will be set on CodeMirror pre */
+  padding: 0.4em 0;
 }
 .CodeMirror-linenumber {
   padding: 0 8px 0 4px;
@@ -408,11 +545,24 @@ div.input_area > div.highlight > pre {
   border-top-left-radius: 2px;
 }
 .CodeMirror pre {
-  /* In CM3 this went to 4px from 0 in CM2. We need the 0 value because of how we size */
-  /* .CodeMirror-lines */
-  padding: 0;
+  /* In CM3 this went to 4px from 0 in CM2. This sets horizontal padding only,
+    use .CodeMirror-lines for vertical */
+  padding: 0 0.4em;
   border: 0;
   border-radius: 0;
+}
+.CodeMirror-cursor {
+  border-left: 1.4px solid black;
+}
+@media screen and (min-width: 2138px) and (max-width: 4319px) {
+  .CodeMirror-cursor {
+    border-left: 2px solid black;
+  }
+}
+@media screen and (min-width: 4320px) {
+  .CodeMirror-cursor {
+    border-left: 4px solid black;
+  }
 }
 /*
 
@@ -660,6 +810,9 @@ div.output_area img.unconfined,
 div.output_area svg.unconfined {
   max-width: none;
 }
+div.output_area .mglyph > img {
+  max-width: none;
+}
 /* This is needed to protect the pre formating from global settings such
    as that of bootstrap */
 .output {
@@ -698,7 +851,7 @@ div.output_area svg.unconfined {
 }
 div.output_area pre {
   margin: 0;
-  padding: 0;
+  padding: 1px 0 1px 0;
   border: 0;
   vertical-align: baseline;
   color: black;
@@ -820,6 +973,10 @@ div.output_unrecognized a:hover {
 .rendered_html h6:first-child {
   margin-top: 1em;
 }
+.rendered_html ul:not(.list-inline),
+.rendered_html ol:not(.list-inline) {
+  padding-left: 2em;
+}
 
 
 
@@ -836,16 +993,24 @@ div.output_unrecognized a:hover {
 }
 
 
+
+
+
 .rendered_html pre,
+
 
 
 
 .rendered_html tr,
 .rendered_html th,
 
-.rendered_html td,
 
-
+.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
 .rendered_html * + table {
   margin-top: 1em;
 }
@@ -861,6 +1026,11 @@ div.output_unrecognized a:hover {
 
 .rendered_html img.unconfined,
 
+
+.rendered_html * + .alert {
+  margin-top: 1em;
+}
+[dir="rtl"] 
 div.text_cell {
   /* Old browsers */
   display: -webkit-box;
@@ -911,8 +1081,15 @@ h6:hover .anchor-link {
   display: none;
 }
 .text_cell.rendered 
+.text_cell.rendered .rendered_html tr,
+.text_cell.rendered .rendered_html th,
+.text_cell.rendered 
 .text_cell.unrendered .text_cell_render {
   display: none;
+}
+.text_cell .dropzone .input_area {
+  border: 2px dashed #bababa;
+  margin: -1px;
 }
 .cm-header-1,
 .cm-header-2,
@@ -944,163 +1121,134 @@ h6:hover .anchor-link {
   font-style: italic;
 }
 </style>
-<style type="text/css">.highlight .hll { background-color: #ffffcc }
-.highlight  { background: #f8f8f8; }
-.highlight .c { color: #408080; font-style: italic } /* Comment */
-.highlight .err { border: 1px solid #FF0000 } /* Error */
+<style type="text/css">pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #f8f8f8; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
 .highlight .k { color: #008000; font-weight: bold } /* Keyword */
-.highlight .o { color: #666666 } /* Operator */
-.highlight .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
-.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
-.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
-.highlight .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
-.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
-.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
 .highlight .gd { color: #A00000 } /* Generic.Deleted */
 .highlight .ge { font-style: italic } /* Generic.Emph */
-.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
 .highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
-.highlight .gi { color: #00A000 } /* Generic.Inserted */
-.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
 .highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
 .highlight .gs { font-weight: bold } /* Generic.Strong */
 .highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
-.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .gt { color: #04D } /* Generic.Traceback */
 .highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
 .highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
 .highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
 .highlight .kp { color: #008000 } /* Keyword.Pseudo */
 .highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
 .highlight .kt { color: #B00040 } /* Keyword.Type */
-.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .m { color: #666 } /* Literal.Number */
 .highlight .s { color: #BA2121 } /* Literal.String */
-.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .na { color: #687822 } /* Name.Attribute */
 .highlight .nb { color: #008000 } /* Name.Builtin */
-.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
-.highlight .no { color: #880000 } /* Name.Constant */
-.highlight .nd { color: #AA22FF } /* Name.Decorator */
-.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
-.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
-.highlight .nf { color: #0000FF } /* Name.Function */
-.highlight .nl { color: #A0A000 } /* Name.Label */
-.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
 .highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
 .highlight .nv { color: #19177C } /* Name.Variable */
-.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
-.highlight .w { color: #bbbbbb } /* Text.Whitespace */
-.highlight .mb { color: #666666 } /* Literal.Number.Bin */
-.highlight .mf { color: #666666 } /* Literal.Number.Float */
-.highlight .mh { color: #666666 } /* Literal.Number.Hex */
-.highlight .mi { color: #666666 } /* Literal.Number.Integer */
-.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
 .highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
 .highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
 .highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
 .highlight .s2 { color: #BA2121 } /* Literal.String.Double */
-.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
 .highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
-.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
 .highlight .sx { color: #008000 } /* Literal.String.Other */
-.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
 .highlight .s1 { color: #BA2121 } /* Literal.String.Single */
 .highlight .ss { color: #19177C } /* Literal.String.Symbol */
 .highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
 .highlight .vc { color: #19177C } /* Name.Variable.Class */
 .highlight .vg { color: #19177C } /* Name.Variable.Global */
 .highlight .vi { color: #19177C } /* Name.Variable.Instance */
-.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
-<style type="text/css">
-/* Temporary definitions which will become obsolete with Notebook release 5.0 */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-bold { font-weight: bold; }
-</style>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */</style><div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>In late September, I attended the PyData Paris 2024 conference. There were two days of talks and presentation, plus a day of sprints on open-source libraries, which I sadly couldn't participate in.</p>
-<h2 id="A-few-numbers-first">A few numbers first<a class="anchor-link" href="#A-few-numbers-first">¶</a></h2><p>In total, 46 talks were given on three parallel tracks (full schedule <a href="https://pydata.org/paris2024/schedule">here</a>), along with scores of lightning talks, a few coffee and lunch breaks, and a nice evening cocktail.</p>
+<h2 id="A-few-numbers-first">A few numbers first<a class="anchor-link" href="#A-few-numbers-first">&#182;</a></h2><p>In total, 46 talks were given on three parallel tracks (full schedule <a href="https://pydata.org/paris2024/schedule">here</a>), along with scores of lightning talks, a few coffee and lunch breaks, and a nice evening cocktail.</p>
 <p>The event was hosted at “La Cité des Sciences et de l’Industrie”, and 680 people attended! The last PyData conference in Paris was in 2017, so I guess people were excited to join after such a long break.</p>
 <p>I attended to 16 talks, took 15 pages of notes, slept during only one talk (probably a new personal record), did some networking, and got a cool t-shirt!</p>
-<p><img src="/images/cite_des_sciences.png" style="width:600px" title="City of Science and Industry, the biggest science museum in Europe!"></p>
+<p><img src="/images/cite_des_sciences.png" title="City of Science and Industry, the biggest science museum in Europe!" style="width:600px" /></p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="My-overall-impressions">My overall impressions<a class="anchor-link" href="#My-overall-impressions">¶</a></h2><p>It was my first in-person conference since PyData Cambridge 2019, and it’s much, much better than attending online!</p>
+<h2 id="My-overall-impressions">My overall impressions<a class="anchor-link" href="#My-overall-impressions">&#182;</a></h2><p>It was my first in-person conference since PyData Cambridge 2019, and it’s much, much better than attending online!</p>
 <p>A lot of the talks were on LLMs and RAG, but I found most of them somewhat unsophisticated, or missing comparisons with basic benchmarks.</p>
 <p>There were however some excellent talks on methodology and best practices (my personal favorites), and a few unexpectedly introspective ones.</p>
 <p>I was honestly quite disappointed with the keynotes from Mistral and HuggingFace: I felt they were presenting a product catalog, rather than giving insightful perspectives on the field, which I think most attendees were expecting.</p>
 <p>As always, lightning talks are very random, but very fun! For instance, an Italian guy managed to turn data structures into stand-up comedy material—no easy feat!</p>
 <p>All in all, I came back with a lot of new things to explore!</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="My-top-5-talks">My top-5 talks<a class="anchor-link" href="#My-top-5-talks">¶</a></h2><h3 id="“Handling-predictive-uncertainty-in-Machine-Learning”,-by-Olivier-Grisel">“Handling predictive uncertainty in Machine Learning”, by Olivier Grisel<a class="anchor-link" href="#“Handling-predictive-uncertainty-in-Machine-Learning”,-by-Olivier-Grisel">¶</a></h3><p>(video <a href="https://www.youtube.com/watch?v=-gYnfA0e5ic">here</a>, summary + link to the slides <a href="https://pretalx.com/pydata-paris-2024/talk/7VYUGP/">here</a>)</p>
-<p>This was one of the keynotes, but it was more of a presentation on methodology, particularly on calibrating output probabilities in ML models, and how to make sure your model doesn’t bankrupt your company. I really liked how he presented the decoupling of the predictive model from the decision making algorithm.<br>
+<h2 id="My-top-5-talks">My top-5 talks<a class="anchor-link" href="#My-top-5-talks">&#182;</a></h2><h3 id="“Handling-predictive-uncertainty-in-Machine-Learning”,-by-Olivier-Grisel">&#8220;Handling predictive uncertainty in Machine Learning&#8221;, by Olivier Grisel<a class="anchor-link" href="#“Handling-predictive-uncertainty-in-Machine-Learning”,-by-Olivier-Grisel">&#182;</a></h3><p>(video <a href="https://www.youtube.com/watch?v=-gYnfA0e5ic">here</a>, summary + link to the slides <a href="https://pretalx.com/pydata-paris-2024/talk/7VYUGP/">here</a>)</p>
+<p>This was one of the keynotes, but it was more of a presentation on methodology, particularly on calibrating output probabilities in ML models, and how to make sure your model doesn’t bankrupt your company. I really liked how he presented the decoupling of the predictive model from the decision making algorithm.<br />
 Olivier is one of the core members of the original scikit-learn team, and he's always giving insightful talks.</p>
-<h3 id="“The-expanding-Apache-Arrow-universe”,-by-Joris-Van-den-Bossche">“The expanding Apache Arrow universe”, by Joris Van den Bossche<a class="anchor-link" href="#“The-expanding-Apache-Arrow-universe”,-by-Joris-Van-den-Bossche">¶</a></h3><p>(video <a href="https://www.youtube.com/watch?v=3ehleDhnq18">here</a>, summary of the talk <a href="https://pretalx.com/pydata-paris-2024/talk/7VYUGP/">here</a>)</p>
-<p>This was an unexpectedly fascinating talk on what’s going on behind the curtain when we're trying to efficiently store data in memory. It also allowed me to better understand the differences between Arrow, Parquet, and Feather, which can be somewhat blurry. The developers behind all of this are doing very low-level work in the stack, and I am truly in awe of their dedication and the positive impact they have on our field!<br>
+<h3 id="“The-expanding-Apache-Arrow-universe”,-by-Joris-Van-den-Bossche">&#8220;The expanding Apache Arrow universe&#8221;, by Joris Van den Bossche<a class="anchor-link" href="#“The-expanding-Apache-Arrow-universe”,-by-Joris-Van-den-Bossche">&#182;</a></h3><p>(video <a href="https://www.youtube.com/watch?v=3ehleDhnq18">here</a>, summary of the talk <a href="https://pretalx.com/pydata-paris-2024/talk/7VYUGP/">here</a>)</p>
+<p>This was an unexpectedly fascinating talk on what’s going on behind the curtain when we're trying to efficiently store data in memory. It also allowed me to better understand the differences between Arrow, Parquet, and Feather, which can be somewhat blurry. The developers behind all of this are doing very low-level work in the stack, and I am truly in awe of their dedication and the positive impact they have on our field!<br />
 Joris is one of the core developers of pandas, Arrow, and GeoPandas, and he's very good at explaining deeply technical topics clearly.</p>
-<h3 id="“Unpacking-business-metrics”,-by-Max-Halford">“Unpacking business metrics”, by Max Halford<a class="anchor-link" href="#“Unpacking-business-metrics”,-by-Max-Halford">¶</a></h3><p>(video <a href="https://www.youtube.com/watch?v=kiWW4Oty8kY">here</a>, summary of the talk <a href="https://pretalx.com/pydata-paris-2024/talk/Y9S73X/">here</a>, slides <a href="https://maxhalford.github.io/slides/icanexplain-pydata.pdf">there</a>)</p>
-<p>This was a highly practical talk on how to do meaningful analytics for business purposes. I was already familiar with the topic, having read Max's blog post on it a few months ago. It laid out very plainly the kind of best practices that seem totally obvious when stated, but that I never see applied out there, so I think it had a lot of value!<br>
-On top of that, Max coalesced (😇) his insights into an open-source tool for us to easily use! And he used some really cool tech in the process, such as <a href="https://ibis-project.org/">ibis</a>.<br>
-I was just a little sad to see that some members in the audience really didn't get the value of the talk. I think they were too much on the academia side of the crowd, and obviously not used to touchy discussions with business stakeholders...<br>
+<h3 id="“Unpacking-business-metrics”,-by-Max-Halford">&#8220;Unpacking business metrics&#8221;, by Max Halford<a class="anchor-link" href="#“Unpacking-business-metrics”,-by-Max-Halford">&#182;</a></h3><p>(video <a href="https://www.youtube.com/watch?v=kiWW4Oty8kY">here</a>, summary of the talk <a href="https://pretalx.com/pydata-paris-2024/talk/Y9S73X/">here</a>, slides <a href="https://maxhalford.github.io/slides/icanexplain-pydata.pdf">there</a>)</p>
+<p>This was a highly practical talk on how to do meaningful analytics for business purposes. I was already familiar with the topic, having read Max's blog post on it a few months ago. It laid out very plainly the kind of best practices that seem totally obvious when stated, but that I never see applied out there, so I think it had a lot of value!<br />
+On top of that, Max coalesced (😇) his insights into an open-source tool for us to easily use! And he used some really cool tech in the process, such as <a href="https://ibis-project.org/">ibis</a>.<br />
+I was just a little sad to see that some members in the audience really didn't get the value of the talk. I think they were too much on the academia side of the crowd, and obviously not used to touchy discussions with business stakeholders...<br />
 In any case, Max's <a href="https://maxhalford.github.io/">blog</a> is a must-read, he's a <em>brilliant</em> science communicator!</p>
-<h3 id="“Dreadful-Frailties-in-Propensity-Score-Matching”,-by-Alexandre-Abraham">“Dreadful Frailties in Propensity Score Matching”, by Alexandre Abraham<a class="anchor-link" href="#“Dreadful-Frailties-in-Propensity-Score-Matching”,-by-Alexandre-Abraham">¶</a></h3><p>(video <a href="https://www.youtube.com/watch?v=y75GbnHizaQ">here</a>, summary of the talk <a href="https://pretalx.com/pydata-paris-2024/talk/VJWXQL/">here</a>, slides, paper and code <a href="https://twinee.fr/2024-09-27-pydata/">there</a>)</p>
-<p>Alexandre presented work from his recent paper on Propensity Score Matching, an algorithm widely used in the healthcare domain. Typically it's applied in order to understand the effect of a new treatment, evaluated in clinical trials on a specific population of sick patients, when given to a broader population of patients maybe not as sick, or with different demographic characteristics. The gist of it is to reweight parts of the samples, to align their statistics.<br>
-He showed that this method allows for a high number of degrees-of-freedom, that result in sometimes shockingly different estimations, which is obviously not good. He also introduced ways to reduce this estimation variability.<br>
-It was deeply interesting and gave me a lot of pointers to explore, because there's a lot that I didn't fully understand on the spot!<br>
+<h3 id="“Dreadful-Frailties-in-Propensity-Score-Matching”,-by-Alexandre-Abraham">&#8220;Dreadful Frailties in Propensity Score Matching&#8221;, by Alexandre Abraham<a class="anchor-link" href="#“Dreadful-Frailties-in-Propensity-Score-Matching”,-by-Alexandre-Abraham">&#182;</a></h3><p>(video <a href="https://www.youtube.com/watch?v=y75GbnHizaQ">here</a>, summary of the talk <a href="https://pretalx.com/pydata-paris-2024/talk/VJWXQL/">here</a>, slides, paper and code <a href="https://twinee.fr/2024-09-27-pydata/">there</a>)</p>
+<p>Alexandre presented work from his recent paper on Propensity Score Matching, an algorithm widely used in the healthcare domain. Typically it's applied in order to understand the effect of a new treatment, evaluated in clinical trials on a specific population of sick patients, when given to a broader population of patients maybe not as sick, or with different demographic characteristics. The gist of it is to reweight parts of the samples, to align their statistics.<br />
+He showed that this method allows for a high number of degrees-of-freedom, that result in sometimes shockingly different estimations, which is obviously not good. He also introduced ways to reduce this estimation variability.<br />
+It was deeply interesting and gave me a lot of pointers to explore, because there's a lot that I didn't fully understand on the spot!<br />
 It was also a nice occasion to catch up with Alexandre, discuss about the evolution of the healthcare startup scene in Paris, and exchange impressions on the talks.</p>
-<h3 id="“MLOps-at-Renault-Group”,-by-Alix-Tiran-Cappello-and-Alexandre-Carton">“MLOps at Renault Group”, by Alix Tiran-Cappello and Alexandre Carton<a class="anchor-link" href="#“MLOps-at-Renault-Group”,-by-Alix-Tiran-Cappello-and-Alexandre-Carton">¶</a></h3><p>(video unavailable, summary of the talk <a href="https://pretalx.com/pydata-paris-2024/talk/ZREEJS/">here</a>)</p>
+<h3 id="“MLOps-at-Renault-Group”,-by-Alix-Tiran-Cappello-and-Alexandre-Carton">&#8220;MLOps at Renault Group&#8221;, by Alix Tiran-Cappello and Alexandre Carton<a class="anchor-link" href="#“MLOps-at-Renault-Group”,-by-Alix-Tiran-Cappello-and-Alexandre-Carton">&#182;</a></h3><p>(video unavailable, summary of the talk <a href="https://pretalx.com/pydata-paris-2024/talk/ZREEJS/">here</a>)</p>
 <p>Last one, a surprisingly deep talk! As the speakers were scaling an MLOps pipeline to their whole organization, they found themselves grappling with <a href="https://en.wikipedia.org/wiki/Conway%27s_law">Conway's Law</a> in real life! It was great to hear them having that kind of hindsight, and explaining the organizational challenges they had to overcome.</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Things-I-want-to-explore">Things I want to explore<a class="anchor-link" href="#Things-I-want-to-explore">¶</a></h2><p>I came back from the conference with a long list of interesting libraries and references to nice scientific papers and books. In no particular order, here's what I'll look into in the coming months:</p>
+<h2 id="Things-I-want-to-explore">Things I want to explore<a class="anchor-link" href="#Things-I-want-to-explore">&#182;</a></h2><p>I came back from the conference with a long list of interesting libraries and references to nice scientific papers and books. In no particular order, here's what I'll look into in the coming months:</p>
 <ul>
 <li>more theory on propensity-score matching</li>
 <li>FireDucks: a compiler-accelerated DataFrame wich pandas API (<a href="https://fireducks-dev.github.io/">link</a>)</li>
@@ -1109,12 +1257,15 @@ It was also a nice occasion to catch up with Alexandre, discuss about the evolut
 <li>ADBC, a cross-language, Arrow-native column-based database access protocol (<a href="https://arrow.apache.org/adbc/current/index.html">link</a>)</li>
 <li>“Practical Data Privacy”, a 2023 O’Reilly book by Katharine Jarmul, a Berlin-based privacy activist and data scientist straight out of a Cory Doctorow novel (<a href="https://www.oreilly.com/library/view/practical-data-privacy/9781098129453/">link</a>)</li>
 </ul>
-<p>Finally, there are cool events coming up soon: PyCon FR will be hosted in Strasbourg from October 31st to November 3rd (<a href="https://www.pycon.fr/2024/fr/schedule.html">link</a>), and Scaleway is organizing the one-day ai-PULSE conference at StationF in Paris on November 7th (<a href="https://www.ai-pulse.eu/agenda">link</a>).<br>
+<p>Finally, there are cool events coming up soon: PyCon FR will be hosted in Strasbourg from October 31st to November 3rd (<a href="https://www.pycon.fr/2024/fr/schedule.html">link</a>), and Scaleway is organizing the one-day ai-PULSE conference at StationF in Paris on November 7th (<a href="https://www.ai-pulse.eu/agenda">link</a>).<br />
 In the meantime, you can watch the released videos from the recent PyCon DE and PyData Amsterdam conferences! (<a href="(https://www.youtube.com/@PyConDE/featured">here</a>) and <a href="https://www.youtube.com/playlist?list=PLGVZCDnMOq0reU2lzNZCn9obkyRVaSnpF">there</a>)</p>
 <p>Until next time! 🐍</p>
+
 </div>
 </div>
 </div>
+ 
+
 
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var mathjaxscript = document.createElement('script');

@@ -83,9 +83,124 @@
 * IPython notebook
 *
 */
-/* CSS font colors for translated ANSI colors. */
+/* CSS font colors for translated ANSI escape sequences */
+/* The color values are a mix of
+   http://www.xcolors.net/dl/baskerville-ivorylight and
+   http://www.xcolors.net/dl/euphrasia */
+.ansi-black-fg {
+  color: #3E424D;
+}
+.ansi-black-bg {
+  background-color: #3E424D;
+}
+.ansi-black-intense-fg {
+  color: #282C36;
+}
+.ansi-black-intense-bg {
+  background-color: #282C36;
+}
+.ansi-red-fg {
+  color: #E75C58;
+}
+.ansi-red-bg {
+  background-color: #E75C58;
+}
+.ansi-red-intense-fg {
+  color: #B22B31;
+}
+.ansi-red-intense-bg {
+  background-color: #B22B31;
+}
+.ansi-green-fg {
+  color: #00A250;
+}
+.ansi-green-bg {
+  background-color: #00A250;
+}
+.ansi-green-intense-fg {
+  color: #007427;
+}
+.ansi-green-intense-bg {
+  background-color: #007427;
+}
+.ansi-yellow-fg {
+  color: #DDB62B;
+}
+.ansi-yellow-bg {
+  background-color: #DDB62B;
+}
+.ansi-yellow-intense-fg {
+  color: #B27D12;
+}
+.ansi-yellow-intense-bg {
+  background-color: #B27D12;
+}
+.ansi-blue-fg {
+  color: #208FFB;
+}
+.ansi-blue-bg {
+  background-color: #208FFB;
+}
+.ansi-blue-intense-fg {
+  color: #0065CA;
+}
+.ansi-blue-intense-bg {
+  background-color: #0065CA;
+}
+.ansi-magenta-fg {
+  color: #D160C4;
+}
+.ansi-magenta-bg {
+  background-color: #D160C4;
+}
+.ansi-magenta-intense-fg {
+  color: #A03196;
+}
+.ansi-magenta-intense-bg {
+  background-color: #A03196;
+}
+.ansi-cyan-fg {
+  color: #60C6C8;
+}
+.ansi-cyan-bg {
+  background-color: #60C6C8;
+}
+.ansi-cyan-intense-fg {
+  color: #258F8F;
+}
+.ansi-cyan-intense-bg {
+  background-color: #258F8F;
+}
+.ansi-white-fg {
+  color: #C5C1B4;
+}
+.ansi-white-bg {
+  background-color: #C5C1B4;
+}
+.ansi-white-intense-fg {
+  color: #A1A6B2;
+}
+.ansi-white-intense-bg {
+  background-color: #A1A6B2;
+}
+.ansi-default-inverse-fg {
+  color: #FFFFFF;
+}
+.ansi-default-inverse-bg {
+  background-color: #000000;
+}
+.ansi-bold {
+  font-weight: bold;
+}
+.ansi-underline {
+  text-decoration: underline;
+}
+/* The following styles are deprecated an will be removed in a future version */
 .ansibold {
   font-weight: bold;
+}
+.ansi-inverse {
+  outline: 0.5px dotted;
 }
 /* use dark versions for foreground, to improve visibility */
 .ansiblack {
@@ -164,12 +279,20 @@ div.cell {
   /* This acts as a spacer between cells, that is outside the border */
   margin: 0px;
   outline: none;
-  border-left-width: 1px;
-  padding-left: 5px;
-  background: linear-gradient(to right, transparent -40px, transparent 1px, transparent 1px, transparent 100%);
+  position: relative;
+  overflow: visible;
+}
+div.cell:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: transparent;
 }
 div.cell.jupyter-soft-selected {
-  border-left-color: #90CAF9;
   border-left-color: #E3F2FD;
   border-left-width: 1px;
   padding-left: 5px;
@@ -182,27 +305,39 @@ div.cell.jupyter-soft-selected {
     border-color: transparent;
   }
 }
-div.cell.selected {
+div.cell.selected,
+div.cell.selected.jupyter-soft-selected {
   border-color: #ababab;
-  border-left-width: 0px;
-  padding-left: 6px;
-  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 5px, transparent 5px, transparent 100%);
+}
+div.cell.selected:before,
+div.cell.selected.jupyter-soft-selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #42A5F5;
 }
 @media print {
-  div.cell.selected {
+  div.cell.selected,
+  div.cell.selected.jupyter-soft-selected {
     border-color: transparent;
   }
 }
-div.cell.selected.jupyter-soft-selected {
-  border-left-width: 0;
-  padding-left: 6px;
-  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 7px, #E3F2FD 7px, #E3F2FD 100%);
-}
 .edit_mode div.cell.selected {
   border-color: #66BB6A;
-  border-left-width: 0px;
-  padding-left: 6px;
-  background: linear-gradient(to right, #66BB6A -40px, #66BB6A 5px, transparent 5px, transparent 100%);
+}
+.edit_mode div.cell.selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #66BB6A;
 }
 @media print {
   .edit_mode div.cell.selected {
@@ -398,7 +533,9 @@ div.input_area > div.highlight > pre {
 .CodeMirror-lines {
   /* In CM2, this used to be 0.4em, but in CM3 it went to 4px. We need the em value because */
   /* we have set a different line-height and want this to scale with that. */
-  padding: 0.4em;
+  /* Note that this should set vertical padding only, since CodeMirror assumes
+       that horizontal padding will be set on CodeMirror pre */
+  padding: 0.4em 0;
 }
 .CodeMirror-linenumber {
   padding: 0 8px 0 4px;
@@ -408,11 +545,24 @@ div.input_area > div.highlight > pre {
   border-top-left-radius: 2px;
 }
 .CodeMirror pre {
-  /* In CM3 this went to 4px from 0 in CM2. We need the 0 value because of how we size */
-  /* .CodeMirror-lines */
-  padding: 0;
+  /* In CM3 this went to 4px from 0 in CM2. This sets horizontal padding only,
+    use .CodeMirror-lines for vertical */
+  padding: 0 0.4em;
   border: 0;
   border-radius: 0;
+}
+.CodeMirror-cursor {
+  border-left: 1.4px solid black;
+}
+@media screen and (min-width: 2138px) and (max-width: 4319px) {
+  .CodeMirror-cursor {
+    border-left: 2px solid black;
+  }
+}
+@media screen and (min-width: 4320px) {
+  .CodeMirror-cursor {
+    border-left: 4px solid black;
+  }
 }
 /*
 
@@ -660,6 +810,9 @@ div.output_area img.unconfined,
 div.output_area svg.unconfined {
   max-width: none;
 }
+div.output_area .mglyph > img {
+  max-width: none;
+}
 /* This is needed to protect the pre formating from global settings such
    as that of bootstrap */
 .output {
@@ -698,7 +851,7 @@ div.output_area svg.unconfined {
 }
 div.output_area pre {
   margin: 0;
-  padding: 0;
+  padding: 1px 0 1px 0;
   border: 0;
   vertical-align: baseline;
   color: black;
@@ -820,6 +973,10 @@ div.output_unrecognized a:hover {
 .rendered_html h6:first-child {
   margin-top: 1em;
 }
+.rendered_html ul:not(.list-inline),
+.rendered_html ol:not(.list-inline) {
+  padding-left: 2em;
+}
 
 
 
@@ -836,16 +993,24 @@ div.output_unrecognized a:hover {
 }
 
 
+
+
+
 .rendered_html pre,
+
 
 
 
 .rendered_html tr,
 .rendered_html th,
 
-.rendered_html td,
 
-
+.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
 .rendered_html * + table {
   margin-top: 1em;
 }
@@ -861,6 +1026,11 @@ div.output_unrecognized a:hover {
 
 .rendered_html img.unconfined,
 
+
+.rendered_html * + .alert {
+  margin-top: 1em;
+}
+[dir="rtl"] 
 div.text_cell {
   /* Old browsers */
   display: -webkit-box;
@@ -911,8 +1081,15 @@ h6:hover .anchor-link {
   display: none;
 }
 .text_cell.rendered 
+.text_cell.rendered .rendered_html tr,
+.text_cell.rendered .rendered_html th,
+.text_cell.rendered 
 .text_cell.unrendered .text_cell_render {
   display: none;
+}
+.text_cell .dropzone .input_area {
+  border: 2px dashed #bababa;
+  margin: -1px;
 }
 .cm-header-1,
 .cm-header-2,
@@ -944,132 +1121,103 @@ h6:hover .anchor-link {
   font-style: italic;
 }
 </style>
-<style type="text/css">.highlight .hll { background-color: #ffffcc }
-.highlight  { background: #f8f8f8; }
-.highlight .c { color: #408080; font-style: italic } /* Comment */
-.highlight .err { border: 1px solid #FF0000 } /* Error */
+<style type="text/css">pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #f8f8f8; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
 .highlight .k { color: #008000; font-weight: bold } /* Keyword */
-.highlight .o { color: #666666 } /* Operator */
-.highlight .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
-.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
-.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
-.highlight .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
-.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
-.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
 .highlight .gd { color: #A00000 } /* Generic.Deleted */
 .highlight .ge { font-style: italic } /* Generic.Emph */
-.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
 .highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
-.highlight .gi { color: #00A000 } /* Generic.Inserted */
-.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
 .highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
 .highlight .gs { font-weight: bold } /* Generic.Strong */
 .highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
-.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .gt { color: #04D } /* Generic.Traceback */
 .highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
 .highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
 .highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
 .highlight .kp { color: #008000 } /* Keyword.Pseudo */
 .highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
 .highlight .kt { color: #B00040 } /* Keyword.Type */
-.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .m { color: #666 } /* Literal.Number */
 .highlight .s { color: #BA2121 } /* Literal.String */
-.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .na { color: #687822 } /* Name.Attribute */
 .highlight .nb { color: #008000 } /* Name.Builtin */
-.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
-.highlight .no { color: #880000 } /* Name.Constant */
-.highlight .nd { color: #AA22FF } /* Name.Decorator */
-.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
-.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
-.highlight .nf { color: #0000FF } /* Name.Function */
-.highlight .nl { color: #A0A000 } /* Name.Label */
-.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
 .highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
 .highlight .nv { color: #19177C } /* Name.Variable */
-.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
-.highlight .w { color: #bbbbbb } /* Text.Whitespace */
-.highlight .mb { color: #666666 } /* Literal.Number.Bin */
-.highlight .mf { color: #666666 } /* Literal.Number.Float */
-.highlight .mh { color: #666666 } /* Literal.Number.Hex */
-.highlight .mi { color: #666666 } /* Literal.Number.Integer */
-.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
 .highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
 .highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
 .highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
 .highlight .s2 { color: #BA2121 } /* Literal.String.Double */
-.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
 .highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
-.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
 .highlight .sx { color: #008000 } /* Literal.String.Other */
-.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
 .highlight .s1 { color: #BA2121 } /* Literal.String.Single */
 .highlight .ss { color: #19177C } /* Literal.String.Symbol */
 .highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
 .highlight .vc { color: #19177C } /* Name.Variable.Class */
 .highlight .vg { color: #19177C } /* Name.Variable.Global */
 .highlight .vi { color: #19177C } /* Name.Variable.Instance */
-.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
-<style type="text/css">
-/* Temporary definitions which will become obsolete with Notebook release 5.0 */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-bold { font-weight: bold; }
-</style>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */</style><div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Last week, I had the privilege of attending the Biotechno Est Forum in Strasbourg, France. The event is primarily a job fair, and it's organized by and for PhD students and post-docs. The forum featured various roundtables that focused on the transition from academia to industry.</p>
 <p>I was honored to participate in the data science and AI roundtable, which was organized by <a href="https://www.linkedin.com/in/yung-chieh-chen-897058104/">Yung-Chieh Chen</a>. My fellow speakers included <a href="https://www.linkedin.com/in/dr-alexander-neumann">Dr. Alexander Neumann</a>, co-founder of Omiqa Bioinformatics, a Berlin-based CRO specializing in sequencing data analysis, <a href="https://www.linkedin.com/in/zeineb-si-chaib-74aba625/">Dr. Zeineb Si Chaib</a>, a senior scientist at Schrödinger, working on AI-driven drug design, and <a href="https://sites.google.com/site/benoitrosa">Dr. Benoît Rosa</a>, a CNRS researcher in medical robotics, and long-time friend of mine.</p>
 <p>For my brief presentation, I wanted to share the advice that I wish someone had given me when I first entered the industry after completing my PhD. I reflected on the skills that I developed during my PhD that proved to be valuable later on, as well as the differences between academia and industry.</p>
 <p>Below, I've summarized the key points from my presentation. Keep in mind that this is not an exhaustive list, and my insights are based solely on my own experiences. So, take it with a grain of salt!</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="/images/round_table_DSAI.jpeg" style="width:600px" title="Official poster of the event (credits Forum Biotechno Est)."></p>
+<p><img src="/images/round_table_DSAI.jpeg" title="Official poster of the event (credits Forum Biotechno Est)." style="width:600px" /></p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Your-strengths,-out-of-your-PhD">Your strengths, out of your PhD<a class="anchor-link" href="#Your-strengths,-out-of-your-PhD">¶</a></h2><p>As a PhD holder, you come with a unique set of skills that make you an asset to any organization. Here are some of the strengths that you can leverage in your professional life:</p>
+<h2 id="Your-strengths,-out-of-your-PhD">Your strengths, out of your PhD<a class="anchor-link" href="#Your-strengths,-out-of-your-PhD">&#182;</a></h2><p>As a PhD holder, you come with a unique set of skills that make you an asset to any organization. Here are some of the strengths that you can leverage in your professional life:</p>
 <ul>
 <li>Curiosity and capacity to dig deeper on an issue</li>
 <li>Clear writing abilities</li>
@@ -1078,57 +1226,60 @@ h6:hover .anchor-link {
 <li>Ability to precisely define a concept</li>
 </ul>
 <p>To be clear, it's strengths that you're <em>supposed</em> to have acquired during your PhD. Let's go through each one.</p>
-<h3 id="Curiosity-and-capacity-to-dig-deeper-on-an-issue">Curiosity and capacity to dig deeper on an issue<a class="anchor-link" href="#Curiosity-and-capacity-to-dig-deeper-on-an-issue">¶</a></h3><p>To be fair, it's not so much a capacity, as a willingness: most people are not used to asking "why" all the time and looking for sources, but it's been drilled into us during our PhD.</p>
+<h3 id="Curiosity-and-capacity-to-dig-deeper-on-an-issue">Curiosity and capacity to dig deeper on an issue<a class="anchor-link" href="#Curiosity-and-capacity-to-dig-deeper-on-an-issue">&#182;</a></h3><p>To be fair, it's not so much a capacity, as a willingness: most people are not used to asking "why" all the time and looking for sources, but it's been drilled into us during our PhD.</p>
 <p>You're also used to train yourself on new topics constantly, and to efficiently seek high-quality information. This is a valuable skill that you can share with your team, especially since this is not the case for most engineers, most of whom are not used to attending conferences. I think creating or encouraging a culture in your team around this is a way to have a lot of impact, since you'll have a multiplying effect on the team, and this is really high-value. In the data science and ML space, there are a lot of conferences that you can attend to online and for free.</p>
-<h3 id="Clear-writing-abilities">Clear writing abilities<a class="anchor-link" href="#Clear-writing-abilities">¶</a></h3><p>This is an absolute must, and this is something everyone can keep working on, because we always need to make things clearer and clearer, and to adapt our discourse to our reader/audience.</p>
+<h3 id="Clear-writing-abilities">Clear writing abilities<a class="anchor-link" href="#Clear-writing-abilities">&#182;</a></h3><p>This is an absolute must, and this is something everyone can keep working on, because we always need to make things clearer and clearer, and to adapt our discourse to our reader/audience.</p>
 <p>In the companies you'll work at, people will usually turn to you when they encounter complex things, in the hope that you help them cut through the complexity, and gain a better understanding. So if you're making things even more confusing, you'll be letting them down! And they probably won't ask you next time.</p>
-<h3 id="Public-speaking-skills">Public speaking skills<a class="anchor-link" href="#Public-speaking-skills">¶</a></h3><p>This can seem surprising, but during your PhD you've probably had far more opportunities to do presentations, talks, or seminars, than most engineers your age. And you've probably had some tutoring around public speaking.</p>
+<h3 id="Public-speaking-skills">Public speaking skills<a class="anchor-link" href="#Public-speaking-skills">&#182;</a></h3><p>This can seem surprising, but during your PhD you've probably had far more opportunities to do presentations, talks, or seminars, than most engineers your age. And you've probably had some tutoring around public speaking.</p>
 <p>This is something valuable, if you're not yet comfortable with it, you should absolutely take on any opportunity to speak publicly. This will open up new possibilities for you, for instance being able to discuss with customers, with varying degrees of technical knowledge.</p>
-<h3 id="Ability-to-formulate-or-reformulate-an-issue">Ability to formulate or reformulate an issue<a class="anchor-link" href="#Ability-to-formulate-or-reformulate-an-issue">¶</a></h3><p>Research gives you the ability to be more comfortable with complexity and uncertainty than most people. In companies, you'll find a lot of people that are very good at execution, meaning they can code well and fast (you should definitely try to learn as much as you can from them!). But you usually have a better technical culture when it comes to algorithms, machine learning models, statistical methods and pitfalls.</p>
+<h3 id="Ability-to-formulate-or-reformulate-an-issue">Ability to formulate or reformulate an issue<a class="anchor-link" href="#Ability-to-formulate-or-reformulate-an-issue">&#182;</a></h3><p>Research gives you the ability to be more comfortable with complexity and uncertainty than most people. In companies, you'll find a lot of people that are very good at execution, meaning they can code well and fast (you should definitely try to learn as much as you can from them!). But you usually have a better technical culture when it comes to algorithms, machine learning models, statistical methods and pitfalls.</p>
 <p>So seek out problems that people have, listen to them very carefully, and ask questions to get past the symptoms of the problems, and closer to the causes; helping them can be about developing a sufficient perspective that allows you to reformulate it in a better and simpler framework, or creating a shared and precise vocabulary. From there the solution can often be an order of magnitude easier to find, or you can realize that there's a completely different way of doing things that may avoid the issue entirely.</p>
-<h3 id="Ability-to-precisely-define-a-concept">Ability to precisely define a concept<a class="anchor-link" href="#Ability-to-precisely-define-a-concept">¶</a></h3><p>You'll realize quickly that in the corporate world people are usually very lax with definitions. The same name can mean different things to different people, and different names might be used for the same thing. This can lead to confusion and miscommunication.</p>
+<h3 id="Ability-to-precisely-define-a-concept">Ability to precisely define a concept<a class="anchor-link" href="#Ability-to-precisely-define-a-concept">&#182;</a></h3><p>You'll realize quickly that in the corporate world people are usually very lax with definitions. The same name can mean different things to different people, and different names might be used for the same thing. This can lead to confusion and miscommunication.</p>
 <p>Be willing to ask seemingly dumb questions, and confront people with examples to get to a very precise definition, meaning one that can be implemented with code. A very common example is the definition of "customer"; depending on who you ask (sales, customer services, finance...), it will not be the same in subtle ways.</p>
 <p>Depending on the environment, you might also find that there is very little written information accessible to everyone in the company: info might be in Word documents or PowerPoint presentations, emails, or worse, inside people's heads...
 In that case I think it's your responsibility, since you're probably the best suited person for that task, to start some kind of internal wiki, and to make information accessible, searchable, and up-to-date.</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="What-is-different,-and-what-is-implicitely-expected-from-you">What is different, and what is implicitely expected from you<a class="anchor-link" href="#What-is-different,-and-what-is-implicitely-expected-from-you">¶</a></h2><ul>
+<h2 id="What-is-different,-and-what-is-implicitely-expected-from-you">What is different, and what is implicitely expected from you<a class="anchor-link" href="#What-is-different,-and-what-is-implicitely-expected-from-you">&#182;</a></h2><ul>
 <li>No premium on novelty or complexity</li>
 <li>Different incentives</li>
 <li>Capacity to work within a team is crucial</li>
 <li>Knowing how to build and evaluate a baseline</li>
 </ul>
-<h3 id="There's-no-premium-on-novelty-or-complexity">There's no premium on novelty or complexity<a class="anchor-link" href="#There's-no-premium-on-novelty-or-complexity">¶</a></h3><p>This is one of the biggest differences with academia, and you might need quite a long time to shake off that reflex... Usually in the industry, loving novelty and complexity for their own sake is viewed as a sign of someone junior that tries to impress their colleagues. So, not especially favorably.</p>
+<h3 id="There's-no-premium-on-novelty-or-complexity">There's no premium on novelty or complexity<a class="anchor-link" href="#There's-no-premium-on-novelty-or-complexity">&#182;</a></h3><p>This is one of the biggest differences with academia, and you might need quite a long time to shake off that reflex... Usually in the industry, loving novelty and complexity for their own sake is viewed as a sign of someone junior that tries to impress their colleagues. So, not especially favorably.</p>
 <p>Granted, sometimes complexity can be an argument wielded by sales and marketing to help sell your product. But overall you need to start thinking a lot more like engineers: more moving parts and complexity are bad, it makes things more fragile, and more difficult and expensive to maintain.</p>
 <p>A question I like asking myself when confronted with a new problem is: <em>"what's the absolute dumbest solution that will work, and that I can get away with?"</em>. And then I implement that trivial solution. Even if you might need a more complex solution in the end, a simple one is <em>not</em> a waste of time: it will help you better understand the problem, it can act as a baseline (and sometimes a surprisingly difficult one to beat!), or as a fail-safe: once you embed your solution in a larger system, if conditions make your "complex" solution fail, you can still default to the "dumb" one.</p>
-<h3 id="The-incentives-are-different,-so-you-get-very-different-behaviors">The incentives are different, so you get very different behaviors<a class="anchor-link" href="#The-incentives-are-different,-so-you-get-very-different-behaviors">¶</a></h3><p>No one cares much about SotA (State-of-the-Art, meaning the best performance in the scientific literature for a given research problem at a given date), because SotA does not tie in easily with revenue.<br>
-On a related note, you have to optimize for the right metric: data scientists naïvely use accuracy or something like this, sometimes because it's the easily accessible one, sometimes because they didn't talk with the business people. But you need to realize that the model you're building will be a tiny part of a larger system, that is supposed to be profitable from the point-of-view of the company. So, at some point, you have to translate the evaluation of your systems into €/$, and you have to monitor its performance.<br>
+<h3 id="The-incentives-are-different,-so-you-get-very-different-behaviors">The incentives are different, so you get very different behaviors<a class="anchor-link" href="#The-incentives-are-different,-so-you-get-very-different-behaviors">&#182;</a></h3><p>No one cares much about SotA (State-of-the-Art, meaning the best performance in the scientific literature for a given research problem at a given date), because SotA does not tie in easily with revenue.<br />
+On a related note, you have to optimize for the right metric: data scientists naïvely use accuracy or something like this, sometimes because it's the easily accessible one, sometimes because they didn't talk with the business people. But you need to realize that the model you're building will be a tiny part of a larger system, that is supposed to be profitable from the point-of-view of the company. So, at some point, you have to translate the evaluation of your systems into €/$, and you have to monitor its performance.<br />
 On the same topic, there's a <a href="https://www.youtube.com/watch?v=aTJPvfQ_fLY&amp;ab_channel=PyData">talk</a> I really like, by Dillon Gardner at PyData London 2022, where he shows very clearly that the best model can sometimes make you lose money.</p>
 <p>I'll just throw two other observations here, without much explanation, because I think they're pretty obvious: the time horizons are not the same, and in the industry, "done is better than perfect".</p>
-<h3 id="Capacity-to-work-within-a-team-is-crucial">Capacity to work within a team is crucial<a class="anchor-link" href="#Capacity-to-work-within-a-team-is-crucial">¶</a></h3><p>This point is mainly about coding. There's a stigma around bad code from researchers. So I suggest that you learn right now the usual tools and methodologies around version control, code testing, code reviews, agile work methods and rituals... if you don't know them already.</p>
-<p>First of all, you won't be looked at like a complete alien when you arrive on your first day in a team, and ask "what's that git thingy you keep talking about?". And second, it might actually help you during your PhD, to track the changes in your manuscript, in your experimental results, or in your statistical analyses.<br>
+<h3 id="Capacity-to-work-within-a-team-is-crucial">Capacity to work within a team is crucial<a class="anchor-link" href="#Capacity-to-work-within-a-team-is-crucial">&#182;</a></h3><p>This point is mainly about coding. There's a stigma around bad code from researchers. So I suggest that you learn right now the usual tools and methodologies around version control, code testing, code reviews, agile work methods and rituals... if you don't know them already.</p>
+<p>First of all, you won't be looked at like a complete alien when you arrive on your first day in a team, and ask "what's that git thingy you keep talking about?". And second, it might actually help you during your PhD, to track the changes in your manuscript, in your experimental results, or in your statistical analyses.<br />
 If you still need to be convinced by someone else, <a href="https://walkingrandomly.com/?p=6653">here's a very detailed blog post</a> about <em>why</em> you might care (OK, I admit that the intro is not very encouraging, but I promise it's worth it).</p>
-<h3 id="Knowing-how-to-build-and-evaluate-a-baseline">Knowing how to build and evaluate a baseline<a class="anchor-link" href="#Knowing-how-to-build-and-evaluate-a-baseline">¶</a></h3><p>In the industry, when you have a new problem to solve, usually there's no clear baseline. It's up to you to: formalize the data you need to collect (what dimensions do you need? how will you code the information, what's the desirable level of granularity?), then actually gather it, build a first simple system, define the modalities of evaluation, run a first evaluation, and then improve on it.<br>
+<h3 id="Knowing-how-to-build-and-evaluate-a-baseline">Knowing how to build and evaluate a baseline<a class="anchor-link" href="#Knowing-how-to-build-and-evaluate-a-baseline">&#182;</a></h3><p>In the industry, when you have a new problem to solve, usually there's no clear baseline. It's up to you to: formalize the data you need to collect (what dimensions do you need? how will you code the information, what's the desirable level of granularity?), then actually gather it, build a first simple system, define the modalities of evaluation, run a first evaluation, and then improve on it.<br />
 This is not simple. Hopefully your experience in academia has exposed you to some of these steps, so you already have a good grasp on good practices. I hope it also made you absolutely obsess about having good quality and up-to-date data.</p>
 <p>Also just to be clear, when I say "improve on it", I'm not talking about beating SotA here. First because you won't be in the same conditions: it's very unlikely that your particular use case is exactly the same than a similar and famous research task, for which clean and open datasets exist. And second, because you don't need to beat every system out there, usually you just need to show improvement on past performance.</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">¶</a></h2><p>There it is, everything I wish I'd been told before entering the industry after my PhD.</p>
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h2><p>There it is, everything I wish I'd been told before entering the industry after my PhD.</p>
 <p>Coming from academia, the industry is a completely new world, and you have a lot of things to learn, so it's exciting! A lot of the problems you'll encounter will not seem very interesting at first glance, but if you go sufficiently in the details, suddenly you'll understand their intricacy. It's up to you to uncover this hidden complexity, and to elucidate it, so that you can best address it.</p>
 <p>One last crucial piece of advice: when searching for your first job, I think you should be as careful as when you chose your PhD advisor. Seek teams that already have a knack for learning new stuff and continously improve on how they work, but where your skills don't overlap too much. This way, everyone will have something to learn from one another. And having someone more experienced who took a similar journey with a stint in academia will be beneficial.</p>
+
 </div>
 </div>
 </div>
+ 
+
 
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var mathjaxscript = document.createElement('script');
