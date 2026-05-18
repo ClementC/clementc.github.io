@@ -51,8 +51,9 @@
         <ul class="list-bare">
 
                 <li><a class="nav__link" href="/pages/about.html">About</a></li>
+                <li><a class="nav__link" href="/pages/writing.html">Writing</a></li>
+                <li><a class="nav__link" href="/pages/music.html">Music</a></li>
                 <li><a class="nav__link" href="/category/posts.html">Posts</a></li>
-                <li><a class="nav__link" href="/archives.html">Archive</a></li>
 
 
         </ul>
@@ -1199,20 +1200,17 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Alò 🇭🇹</p>
-<p>A dream many in the NLP (<em>Natural Language Processing</em>) world share is to unlock deeper insights and quantify well-known phenomena in literature by applying algorithms to lengthy texts 🤖📖. Take for instance <a href="https://aclanthology.org/2022.findings-acl.81.pdf">this fascinating study</a>, which dives into the creation of numerical representations or 'embeddings' of fictional characters. It's a game-changer! We can now detect shared traits among characters from different stories.<br>
+<p>A dream many in the NLP (<em>Natural Language Processing</em>) world share is to unlock deeper insights and quantify well-known phenomena in literature by applying algorithms to lengthy texts 🤖📖. Take for instance <a href="https://aclanthology.org/2022.findings-acl.81.pdf">this fascinating study</a>, which dives into the creation of numerical representations or 'embeddings' of fictional characters. It's a game-changer! We can now detect shared traits among characters from different stories.<br />
 It also leaves me pondering if we could play around with a form of "character algebra", something akin to the <a href="https://blog.acolyer.org/2016/04/21/the-amazing-power-of-word-vectors/">"word algebra"</a> in <code>word2vec</code>. Could we have something like <code>Sherlock Holmes - Watson + Hastings ≃ Hercule Poirot</code> or <code>Don Quixote - Sancho Panza + Little John ≃ Robin Hood</code>?
-<img src="/images/word_algebra.png" title='word2vec allowed to experiment with "word algebra".' style="width:600px" /></p>
-<p>When we're crafting machine learning models, a question that's always at the back of our minds is whether packing in more data would supercharge performance. It's a head-scratcher that's traditionally sorted out through good old trial and error. However, a squad from Microsoft Research has come up with some <a href="https://www.microsoft.com/en-us/research/blog/measuring-dataset-similarity-using-optimal-transport">seriously encouraging initial findings</a> on calculating distances between datasets. This could be the silver bullet we've been waiting for to decide which dataset to use for training data augmentation. The blog post is chock-full of interactive visuals that make understanding the approach a breeze.<br>
+<img src="/images/word_algebra.png" style="width:600px" title='word2vec allowed to experiment with "word algebra".' /></p>
+<p>When we're crafting machine learning models, a question that's always at the back of our minds is whether packing in more data would supercharge performance. It's a head-scratcher that's traditionally sorted out through good old trial and error. However, a squad from Microsoft Research has come up with some <a href="https://www.microsoft.com/en-us/research/blog/measuring-dataset-similarity-using-optimal-transport">seriously encouraging initial findings</a> on calculating distances between datasets. This could be the silver bullet we've been waiting for to decide which dataset to use for training data augmentation. The blog post is chock-full of interactive visuals that make understanding the approach a breeze.<br />
 The metric they're using, known as the <a href="https://en.wikipedia.org/wiki/Wasserstein_metric">Wasserstein distance</a>, can be traced back to a far more "down-to-earth" problem posed in 1781 by French mathematician Gaspard Monge: How can you shift a pile of rubble from A to B, spending the least amount of energy?</p>
-<p>Finally, let's wrap up with a <a href="https://arxiv.org/pdf/2103.03098.pdf">methodological paper</a> on best practices for evaluating machine learning models, particularly when you're out to show you've got a leg up on the current state-of-the-art. As there are numerous sources of variation (choice of dataset, splitting into train/test, random seeds, hyperparameter tuning...) a classifier's performance can be considered a random variable. Therefore, it's crucial to sample from these sources of randomness 🎲 as much as possible to provide convincing proof that one method is superior to another.<br>
+<p>Finally, let's wrap up with a <a href="https://arxiv.org/pdf/2103.03098.pdf">methodological paper</a> on best practices for evaluating machine learning models, particularly when you're out to show you've got a leg up on the current state-of-the-art. As there are numerous sources of variation (choice of dataset, splitting into train/test, random seeds, hyperparameter tuning...) a classifier's performance can be considered a random variable. Therefore, it's crucial to sample from these sources of randomness 🎲 as much as possible to provide convincing proof that one method is superior to another.<br />
 The key takeaways from the paper are summed up <a href="https://twitter.com/GaelVaroquaux/status/1367839174469029899">here in a Twitter thread</a> by Gaël Varoquaux, one of the co-founders of scikit-learn and co-author of the paper.</p>
 <p>Wishing you a week filled with insightful reads! 📚</p>
-
 </div>
 </div>
 </div>
- 
-
 
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var mathjaxscript = document.createElement('script');

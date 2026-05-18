@@ -51,8 +51,9 @@
         <ul class="list-bare">
 
                 <li><a class="nav__link" href="/pages/about.html">About</a></li>
+                <li><a class="nav__link" href="/pages/writing.html">Writing</a></li>
+                <li><a class="nav__link" href="/pages/music.html">Music</a></li>
                 <li><a class="nav__link" href="/category/posts.html">Posts</a></li>
-                <li><a class="nav__link" href="/archives.html">Archive</a></li>
 
 
         </ul>
@@ -1201,57 +1202,51 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <p>Recently for work, I've been experimenting with <strong><a href="http://pymc-devs.github.io/pymc3/">PyMC3</a></strong>.</p>
 <p>In particular, I was toying with <strong><a href="https://pymc-devs.github.io/pymc3/notebooks/marginalized_gaussian_mixture_model.html">this example</a></strong> which shows how to implement Gaussian Mixture Models. My goal was to to a generalized mixture, using Gamma distributions instead of more classical Normal distributions.</p>
 <p>At the end of my calculations, I wanted to plot the resulting distributions, along with each component:</p>
-<p><img src="/figures/gamma_mixture.png" title="This was my goal." style="width:600px" /></p>
+<p><img src="/figures/gamma_mixture.png" style="width:600px" title="This was my goal." /></p>
 <p>To plot this, I just had to get the average parameters for each Gamma distributions, and compute the probability density function of each component and of the weighted sum with <strong><a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gamma.html#scipy.stats.gamma">scipy.stats.gamma</a></strong>. Easy, right?</p>
 <p>Wrong.</p>
 <p>Because the samples you get from your MCMC chain make it easy to compute the mean $\mu$ and standard deviation $\sigma$ of each Gamma distribution, but it is not so straightforward to parametrize Gamma distributions in scipy.stats with $\mu$ and $\sigma$.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Canonical-formulation-vs.-API-consistency">Canonical formulation vs. API consistency<a class="anchor-link" href="#Canonical-formulation-vs.-API-consistency">&#182;</a></h2><p>If you refer to the <strong><a href="https://en.wikipedia.org/wiki/Gamma_distribution">definition of the Gamma distribution</a></strong>, it is defined in its canonical form by a shape parameter $k$ and a scale parameter $\theta$.</p>
-<p>The mean and standard deviation of the distribution are related to these parameters by a nice, simple formulas:<br>
+<h2 id="Canonical-formulation-vs.-API-consistency">Canonical formulation vs. API consistency<a class="anchor-link" href="#Canonical-formulation-vs.-API-consistency">¶</a></h2><p>If you refer to the <strong><a href="https://en.wikipedia.org/wiki/Gamma_distribution">definition of the Gamma distribution</a></strong>, it is defined in its canonical form by a shape parameter $k$ and a scale parameter $\theta$.</p>
+<p>The mean and standard deviation of the distribution are related to these parameters by a nice, simple formulas:<br />
 $\begin{equation}
 \mu = k\theta \\
 \sigma^2 = k\theta^2 \\
 \end{equation}$</p>
-<p>From here, it's easy to obtain the formulas for $k$ and $\theta$:<br>
+<p>From here, it's easy to obtain the formulas for $k$ and $\theta$:<br />
 $\begin{equation}
 k = \frac{\mu^2}{\sigma^2} \\
 \theta = \frac{\sigma^2}{\mu} \\
 \end{equation}$</p>
 <p>The problem is that scipy.stats does not use the canonical parameters in its formulation of usual distributions, but a combination of two parameters <code>loc</code> and <code>scale</code> with some additional parameters depending on the distributions.</p>
-<p>For instance, to parametrize the Normal distribution you have to plugin the mean $\mu$ as the <code>loc</code> parameter, and the standard deviation $\sigma$ as the <code>scale</code> parameter, which feels quite natural.<br>
+<p>For instance, to parametrize the Normal distribution you have to plugin the mean $\mu$ as the <code>loc</code> parameter, and the standard deviation $\sigma$ as the <code>scale</code> parameter, which feels quite natural.<br />
 But to parametrize a Gamma distribution, a new parameter <code>a</code> appears, whereas for a Beta distribution, two parameters <code>a</code> and <code>b</code> appear alongside <code>loc</code> and <code>scale</code>.</p>
 <p>Parametrizing a new distribution is thus a bit more complicated as you have to check the documentation.</p>
 <p>So what's arguably good for API consistency is more confusing than not when it comes to clarity and ease-of-use.</p>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="There's-a-library-for-that">There's a library for that<a class="anchor-link" href="#There's-a-library-for-that">&#182;</a></h2><p>While googling around to better wrap my head around this, I found a <strong><a href="http://spencerlyon.com/2015/01/07/canonical-probability-distributions-in-python/">helpful blog post</a></strong> describing this situation, and even presenting a small package, <strong><a href="https://github.com/sglyon/distcan">distcan</a></strong>, that rewrites the constructor of usual distributions and uses the canonical parametrization, making it easier not getting lost.</p>
-
+<h2 id="There's-a-library-for-that">There's a library for that<a class="anchor-link" href="#There's-a-library-for-that">¶</a></h2><p>While googling around to better wrap my head around this, I found a <strong><a href="http://spencerlyon.com/2015/01/07/canonical-probability-distributions-in-python/">helpful blog post</a></strong> describing this situation, and even presenting a small package, <strong><a href="https://github.com/sglyon/distcan">distcan</a></strong>, that rewrites the constructor of usual distributions and uses the canonical parametrization, making it easier not getting lost.</p>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Whining-about-open-source-code">Whining about open-source code<a class="anchor-link" href="#Whining-about-open-source-code">&#182;</a></h2><p>In the end, it wasn't that much of a big deal, but it's always annoying to be stopped in your analysis and lose time on minor technicalities.<br>
+<h2 id="Whining-about-open-source-code">Whining about open-source code<a class="anchor-link" href="#Whining-about-open-source-code">¶</a></h2><p>In the end, it wasn't that much of a big deal, but it's always annoying to be stopped in your analysis and lose time on minor technicalities.<br />
 I know grumbling is easy and totally warrants a "Do it yourself if you're so unhappy" answer. But when your library features all kind of small friction points like this, you're probably hindering adoption by newcomers.</p>
 <p>So I think a nice add could be to have a <code>.from_mean_and_variance()</code> static method to compute canonical parameter values when a closed-form expression exists. I'll try to make a PR on the <code>distcan</code> lib in the coming days to see how it goes.</p>
-
 </div>
 </div>
 </div>
- 
-
 
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var mathjaxscript = document.createElement('script');
